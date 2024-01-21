@@ -78,3 +78,32 @@ ansible all -m apt -a "name=udev state=latest" --become --ask-become-pass
 ```BASH
 ansible all -m apt -a "upgrade=dist" --become --ask-become-pass
 ```
+
+
+## playbooks 
+
+playbooks are in yaml syntax for example `install_apache.yml`
+
+### run playbooks in ansible 
+
+```BASH
+root@master:/home/zero/Ansible# ansible-playbook --ask-become-pass install_apache.yml
+BECOME password:
+
+PLAY [all] ************************************************************************************************************************************************
+
+TASK [Gathering Facts] ************************************************************************************************************************************
+ok: [node-1.zeroCluster.lab]
+ok: [node-3.zeroCluster.lab]
+ok: [node-2.zeroCluster.lab]
+
+TASK [install apache2 package] ****************************************************************************************************************************
+changed: [node-3.zeroCluster.lab]
+changed: [node-2.zeroCluster.lab]
+changed: [node-1.zeroCluster.lab]
+
+PLAY RECAP ************************************************************************************************************************************************
+node-1.zeroCluster.lab     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+node-2.zeroCluster.lab     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+node-3.zeroCluster.lab     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+```
