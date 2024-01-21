@@ -18,3 +18,15 @@ then we can shorten our command to this :
 ```BASH 
 ansible all -m ping
 ```
+
+
+### List hosts Commad
+
+```BASH
+root@master:/home/zero/Ansible# ansible all --list-hosts
+  hosts (3):
+    node-1.zeroCluster.lab
+    node-2.zeroCluster.lab
+    node-3.zeroCluster.lab
+```
+with this command ansible will list all hosts available.
