@@ -30,3 +30,51 @@ root@master:/home/zero/Ansible# ansible all --list-hosts
     node-3.zeroCluster.lab
 ```
 with this command ansible will list all hosts available.
+
+
+### Become Sudo and Run APT
+
+```BASH 
+root@master:/home/zero/Ansible# ansible all -m apt -a update_cache=true --become --ask-become-pass
+BECOME password:
+node-1.zeroCluster.lab | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "cache_update_time": 1705781109,
+    "cache_updated": false,
+    "changed": false
+}
+node-2.zeroCluster.lab | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "cache_update_time": 1705781411,
+    "cache_updated": false,
+    "changed": false
+}
+node-3.zeroCluster.lab | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "cache_update_time": 1705785237,
+    "cache_updated": false,
+    "changed": false
+}
+```
+
+### Install package with apt madule
+```BASH
+root@master:/home/zero/Ansible# ansible all -m apt -a name=vim --become --ask-become-pass
+```
+
+
+### Upgrade package 
+```BASH
+ansible all -m apt -a "name=udev state=latest" --become --ask-become-pass
+```
+
+### Upgrade all packages 
+```BASH
+ansible all -m apt -a "upgrade=dist" --become --ask-become-pass
+```
