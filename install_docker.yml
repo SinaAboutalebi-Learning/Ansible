@@ -1,0 +1,41 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update repository index
+    apt:
+      update_cache: yes
+
+  - name: pull installer script
+    shell: wget http://server.0powerdev.ir/docker/get-docker.sh
+    args:
+        chdir: /tmp
+        warn: false
+
+  - name: remove OLD DNS Resolvers
+    shell: rm /etc/resolv.conf
+    args:
+        removes: "/etc/resolv.conf"
+        warn: false
+        
+ - name: set DNS Resolver
+    shell: echo "nameserver 178.22.122.100" > /etc/resolv.conf
+    args:
+        creates: "/etc/resolv.conf"
+
+  - name: execute script
+    command: sh /tmp/get-docker.sh
+
+  - name: Setup Docker Registry
+    copy:
+      dest: /etc/docker/daemon.json
+      content: "{{ data }}"
+    vars:
+      data: {
+      "insecure-registries": ["http://registry.mastkhiar.xyz"]
+      }
+
+  - name: Restart Docker
+    command: systemctl restart docker
