@@ -1,0 +1,6 @@
+---
+- name: Setup users on the server
+  hosts: all
+  become: yes
+  roles:
+    - user_management

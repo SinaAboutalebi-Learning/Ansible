@@ -1,0 +1,13 @@
+---
+users:
+  - username: batman
+    groups: root,wheel
+    shell: /bin/bash
+    create_home: yes
+    ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+    password: "rosesAreRedVioletsAreBlueThisPasswordShouldBeStrongAndLongToo"
+    password_expire_min: 0
+    password_expire_max: 0
+    state: present  # Change to 'absent' to delete the user
