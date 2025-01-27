@@ -1,6 +1,0 @@
-# Cluster Lab Host Net
-#master.zeroCluster.lab ansible_user=zero
-node-1.zeroCluster.lab ansible_user=zero
-node-2.zeroCluster.lab ansible_user=zero
-node-3.zeroCluster.lab ansible_user=zero
-
