@@ -1,0 +1,13 @@
+- name: Update apt repository index
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Setup and install basic packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - vim
+    - git
+    - wget
+    - curl
