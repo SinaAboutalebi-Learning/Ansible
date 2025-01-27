@@ -1,0 +1,16 @@
+- name: Download Docker installation script
+  ansible.builtin.get_url:
+    url: https://get.docker.com
+    dest: /tmp/install-docker.sh
+    mode: "0755"
+
+- name: Run the installation script
+  ansible.builtin.command:
+    cmd: sh /tmp/install-docker.sh
+  args:
+    creates: /usr/bin/docker
+
+- name: Cleanup installation script
+  ansible.builtin.file:
+    path: /tmp/install-docker.sh
+    state: absent
