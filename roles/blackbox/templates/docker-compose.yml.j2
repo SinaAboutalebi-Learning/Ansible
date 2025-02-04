@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  neteye-exporter:
+    image: quay.io/prometheus/blackbox-exporter:latest
+    container_name: neteye-exporter
+    restart: unless-stopped
+    ports:
+      - 9115:9115/tcp
+    volumes:
+      - ./blackbox.yml:/config/blackbox.yml:ro
+    command:
+      - --config.file=/config/blackbox.yml
+
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9115/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.5"
+        reservations:
+          memory: 128M
