@@ -1,0 +1,22 @@
+- name: Create Docker Compose directory
+  ansible.builtin.file:
+    path: /opt/blackbox-exporter
+    state: directory
+    mode: '0755'
+
+- name: Copy Blackbox Exporter configuration
+  ansible.builtin.template:
+    src: blackbox.yml.j2
+    dest: /opt/blackbox-exporter/blackbox.yml
+    mode: '0644'
+
+- name: Generate Docker Compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: /opt/blackbox-exporter/docker-compose.yml
+    mode: '0644'
+
+- name: Start BlackBox Exporter with Docker Compose
+  community.docker.docker_compose:
+    project_src: /opt/blackbox-exporter
+    state: present
