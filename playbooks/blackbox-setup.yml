@@ -18,3 +18,5 @@
 
     - role: docker
       when: docker_not_installed | bool
+
+    - role: blackbox
