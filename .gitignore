@@ -1,1 +1,37 @@
+#VSCode stuff..
 .vscode/
+
+# Inventory files
+inventory/*
+
+# Ansible-related
+*.retry
+*.log
+*.tmp
+*.swp
+
+# Vault files
+*.vault
+vault_pass.txt
+
+# SSH keys & credentials
+*.pem
+*.key
+*.crt
+.ssh/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+venv
+env
+Vagrantfile
+.vagrant
+
+# Ansible Lint cache
+.ansible-lint
