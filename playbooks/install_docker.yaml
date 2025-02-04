@@ -1,41 +1,20 @@
----
-
-- hosts: all
+- name: Install Docker
+  hosts: servers
   become: true
-  tasks:
 
-  - name: update repository index
-    apt:
-      update_cache: yes
+  pre_tasks:
+    - name: Check if Docker is installed
+      ansible.builtin.command: which docker
+      register: docker_check
+      changed_when: false
+      ignore_errors: true
 
-  - name: pull installer script
-    shell: wget http://server.0powerdev.ir/docker/get-docker.sh
-    args:
-        chdir: /tmp
-        warn: false
+    - name: Set fact if Docker is missing
+      ansible.builtin.set_fact:
+        docker_not_installed: "{{ docker_check.rc != 0 }}"
 
-  - name: remove OLD DNS Resolvers
-    shell: rm /etc/resolv.conf
-    args:
-        removes: "/etc/resolv.conf"
-        warn: false
-        
- - name: set DNS Resolver
-    shell: echo "nameserver 178.22.122.100" > /etc/resolv.conf
-    args:
-        creates: "/etc/resolv.conf"
+  roles:
+    - role: common
 
-  - name: execute script
-    command: sh /tmp/get-docker.sh
-
-  - name: Setup Docker Registry
-    copy:
-      dest: /etc/docker/daemon.json
-      content: "{{ data }}"
-    vars:
-      data: {
-      "insecure-registries": ["http://registry.mastkhiar.xyz"]
-      }
-
-  - name: Restart Docker
-    command: systemctl restart docker
+    - role: docker
+      when: docker_not_installed | bool
