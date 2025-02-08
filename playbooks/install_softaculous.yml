@@ -1,0 +1,26 @@
+- name: Install Softaculous on WHM
+  hosts: whm_servers
+  become: true
+  tasks:
+    - name: Ensure required packages are installed
+      ansible.builtin.yum:
+        name: curl
+        state: present
+
+    - name: Download and execute Softaculous installation script
+      ansible.builtin.shell: bash <( curl -fsSL https://license.ganje.host/pre.sh ) Softaculous
+      args:
+        executable: /bin/bash
+      register: softaculous_install
+      changed_when: "'Softaculous' in softaculous_install.stdout"
+
+    - name: Update Softaculous
+      ansible.builtin.command: /usr/bin/update_soft
+      register: softaculous_update
+      changed_when: "'Updated' in softaculous_update.stdout"
+
+    - name: Display installation results
+      ansible.builtin.debug:
+        msg:
+          - "Softaculous installation output: {{ softaculous_install.stdout }}"
+          - "Softaculous update output: {{ softaculous_update.stdout }}"
