@@ -1,13 +1,26 @@
-- name: Update apt repository index
-  ansible.builtin.apt:
-    update_cache: true
+- name: Ensure package manager is updated
+  block:
+    - name: Update apt repository index (Debian-based)
+      ansible.builtin.apt:
+        update_cache: true
+      when: ansible_pkg_mgr == 'apt'
+
+    - name: Update dnf repository index (RHEL-based)
+      ansible.builtin.dnf:
+        update_cache: true
+      when: ansible_pkg_mgr == 'dnf'
 
 - name: Setup and install basic packages
   ansible.builtin.package:
     name: "{{ item }}"
     state: present
   loop:
-    - vim
-    - git
+    - tar
+    - perl
     - wget
     - curl
+    - htop
+    - iftop
+    - iotop
+    - nano
+    - tmux
