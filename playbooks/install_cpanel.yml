@@ -1,0 +1,8 @@
+- name: Install cPanle/WHM
+  hosts: all
+  become: true
+
+  roles:
+    - role: epel
+    - role: common
+    - role: cpanel
