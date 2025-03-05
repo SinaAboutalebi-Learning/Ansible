@@ -1,0 +1,117 @@
+---
+# csf/tasks/configure.yml
+
+- name: edit csf.conf
+  lineinfile:
+    dest: /etc/csf/csf.conf
+    regexp: '^#? ?{{ item.option }} ='
+    line: '{{ item.option }} = "{{ item.value }}"'
+    state: present
+  with_flattened:
+    - '{{ csf_global_ini_core }}'
+    - '{{ csf_global_ini }}'
+  notify:
+    - check csf conf
+    - restart csf
+  tags:
+    - csf
+    - csf_conf
+    - configuration
+
+- name: edit csf.{allow,ignore,pignore,fignore,dyndns}
+  template:
+    src:  '{{ item }}.j2'
+    dest: '/etc/csf/{{ item }}'
+    owner: root
+    group: root
+    mode: 0600
+  loop:
+    - 'csf.allow'
+    - 'csf.ignore'
+    - 'csf.pignore'
+    - 'csf.fignore'
+    - 'csf.dyndns'
+  notify:
+    - check csf conf
+    - restart csf
+  tags:
+    - csf
+    - csf_conf
+    - configuration
+
+- name: disable csf.blocklists
+  replace:
+    dest: /etc/csf/csf.blocklists
+    regexp: '^(\w+\|.*)$'
+    replace: '#\1'
+  when: csf_blocklists is undefined
+  notify:
+    - check csf conf
+    - restart csf
+  tags:
+    - csf
+    - csf_conf
+    - configuration
+
+- name: enable csf.blocklists
+  lineinfile:
+    dest: /etc/csf/csf.blocklists
+    regexp: '^#{{ item }}\|(.*)$'
+    line: '{{ item }}|\1'
+    state: present
+    backrefs: yes
+  loop: '{{ csf_blocklists }}'
+  when: csf_blocklists is defined
+  notify:
+    - check csf conf
+    - restart csf
+  tags:
+    - csf
+    - csf_conf
+    - configuration
+
+- name: remove csfpre.sh hook
+  file:
+    path: '/etc/csf/csfpre.sh'
+    state: absent
+  when: csf_csfpre_sh is undefined
+  tags:
+    - csf
+    - csf_conf
+    - configuration
+
+- name: remove csfpost.sh hook
+  file:
+    path: '/etc/csf/csfpost.sh'
+    state: absent
+  when: csf_csfpost_sh is undefined
+  tags:
+    - csf
+    - csf_conf
+    - configuration
+
+- name: create csfpre.sh hook
+  copy:
+    content: "{{ vars['csf_csfpre_sh'] }}"
+    dest: '/etc/csf/csfpre.sh'
+    mode: 0700
+  when: csf_csfpre_sh is defined
+  notify:
+    - restart csf
+  tags:
+    - csf
+    - csf_conf
+    - configuration
+
+- name: create csfpost.sh hook
+  copy:
+    content: "{{ vars['csf_csfpost_sh'] }}"
+    dest: '/etc/csf/csfpost.sh'
+    mode: 0700
+  when: csf_csfpost_sh is defined
+  notify:
+    - restart csf
+  tags:
+    - csf
+    - csf_conf
+    - configuration

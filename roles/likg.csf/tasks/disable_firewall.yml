@@ -1,0 +1,25 @@
+---
+# csf/tasks/disable_firewall.yml
+
+- name: disable firewalld (RedHat case)
+  service:
+    name: firewalld
+    state: stopped
+    enabled: no
+  when:
+    - ansible_facts.os_family == 'RedHat'
+    - ansible_facts.service_mgr == 'systemd'
+  ignore_errors: true
+  tags:
+    - services
+
+- name: disable ufw (Ubuntu case)
+  service:
+    name: ufw
+    state: stopped
+    enabled: no
+  when:
+    - ansible_facts.distribution == 'Ubuntu'
+  ignore_errors: true
+  tags:
+    - services
