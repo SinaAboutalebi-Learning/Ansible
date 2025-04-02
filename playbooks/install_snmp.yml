@@ -1,0 +1,15 @@
+- name: Deploy SNMP and Configure CSF
+  hosts: all
+  become: true
+  roles:
+    - snmp
+    - likg.csf
+
+  tasks:
+    - name: Allow SNMP traffic in CSF
+      ansible.builtin.include_role:
+        name: likg.csf
+      vars:
+        csf_allowed_ports:
+          - "udp|in|161|{{ item }}"
+      loop: "{{ snmp_allowed_ips }}"
