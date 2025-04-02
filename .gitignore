@@ -35,3 +35,6 @@ Vagrantfile
 
 # Ansible Lint cache
 .ansible-lint
+
+# My Variables
+group_vars/*
