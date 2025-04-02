@@ -1,0 +1,3 @@
+snmp_community: "public"
+snmp_location: "Sina's Lab"
+snmp_contact: "Admin <sina.aboutalebi2003@gmail.com>"

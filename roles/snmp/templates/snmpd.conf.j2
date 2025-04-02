@@ -1,0 +1,9 @@
+com2sec readonly  default  {{ snmp_community }}
+group MyROGroup v2c readonly
+view all included .1
+access MyROGroup "" any noauth exact all none none
+
+sysLocation  "{{ snmp_location }}"
+sysContact  "{{ snmp_contact }}"
+
+agentAddress udp:161
