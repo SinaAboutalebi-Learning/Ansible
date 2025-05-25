@@ -17,6 +17,6 @@
     mode: '0644'
 
 - name: Start BlackBox Exporter with Docker Compose
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: /opt/blackbox-exporter
     state: present
