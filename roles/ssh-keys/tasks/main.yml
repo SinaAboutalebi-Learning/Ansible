@@ -1,0 +1,22 @@
+- name: Ensure users exist
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    state: present
+    shell: /bin/bash
+  loop: "{{ ssh_users }}"
+
+- name: Ensure .ssh directory exists
+  ansible.builtin.file:
+    path: "/home/{{ item.name }}/.ssh"
+    state: directory
+    mode: "0700"
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+  loop: "{{ ssh_users }}"
+
+- name: Add SSH keys for users
+  ansible.posix.authorized_key:
+    user: "{{ item.0.name }}"
+    key: "{{ item.1 }}"
+    state: present
+  loop: "{{ ssh_users | subelements('keys') }}"
