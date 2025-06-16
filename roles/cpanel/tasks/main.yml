@@ -3,18 +3,30 @@
     path: /etc/selinux/config
     regexp: "^SELINUX="
     line: "SELINUX=disabled"
+  tags:
+    - preInstallCpanel
+    - selinux
+    - system_hardening
 
 - name: Stop and disable firewalld
   ansible.builtin.systemd:
     name: firewalld
     state: stopped
     enabled: false
+  tags:
+    - preInstallCpanel
+    - firewalld
+    - firewall_config
 
 - name: Create cPanel profile directory
   ansible.builtin.file:
     path: /root/cpanel_profile
     state: directory
     mode: "0755"
+  tags:
+    - preInstallCpanel
+    - cpanel_profile
+    - config_prep
 
 - name: Configure cPanel profile
   ansible.builtin.copy:
@@ -22,33 +34,64 @@
     content: |
       mysql-version=10.5
     mode: "0644"
+  tags:
+    - preInstallCpanel
+    - cpanel_profile
+    - mysql_config
 
 - name: Download and install cPanel
+  tags:
+    - preInstallCpanel
+    - cpanel_installer
+    - download_tools
   block:
     - name: Install wget
       ansible.builtin.yum:
         name: wget
         state: present
+      tags:
+        - install_tools
+        - wget
+        - cpanel_installer
 
 - name: Download latest cPanel installer
   ansible.builtin.get_url:
     url: http://httpupdate.cpanel.net/latest
     dest: /home/latest
     mode: "0755"
+  tags:
+    - preInstallCpanel
+    - cpanel_installer
+    - download_script
 
 - name: Run cPanel installer
   ansible.builtin.command: sh /home/latest
   changed_when: false
+  tags:
+    - installCpanel
+    - run_installer
+    - cpanel_installer
 
 - name: Disable network and enable NetworkManager
+  tags:
+    - postInstallCpanel
+    - network_config
+    - systemd_services
   block:
     - name: Disable network service
       ansible.builtin.systemd:
         name: network
         enabled: false
+      tags:
+        - disable_network
+        - postInstallCpanel
 
 - name: Enable and restart NetworkManager
   ansible.builtin.systemd:
     name: NetworkManager
     enabled: true
     state: restarted
+  tags:
+    - enable_networkmanager
+    - postInstallCpanel
+    - network_config
