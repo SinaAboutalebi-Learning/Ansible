@@ -1,15 +1,70 @@
-- name: Install cPanel/WHM
+- name: Install cPanel/WHM and Configure CSF
   hosts: all
   become: true
+
+  vars:
+    ssh_port: "{{ hostvars[inventory_hostname]['ansible_facts']['port'] | default('22') }}"
 
   roles:
     - role: epel
       tags:
         - epel
+
     - role: common
       tags:
         - common
         - base_packages
+
     - role: cpanel
       tags:
         - cpanel
+
+    # Install and configure CSF Firewall
+    - role: likg.csf
+      tags:
+        - firewall
+        - csf
+        - postConfig
+
+      vars:
+        csf_tmp_dir: "/usr/src"
+
+        csf_required_packages:
+          - iptables
+          - perl
+          - unzip
+          - tar
+          - net-tools
+
+        csf_global_ini_core:
+          - option: TESTING
+            value: "0"
+          - option: AUTO_UPDATES
+            value: "1"
+          - option: PORTS_sshd
+            value: "{{ ssh_port }}"
+
+        csf_global_ini:
+          - { option: RESTRICT_SYSLOG, value: "3" }
+          - { option: RESTRICT_UI, value: "1" }
+          - { option: TCP_IN, value: "20,21,{{ ssh_port }},25,53,80,110,143,443,465,587,853,993,995,2077,2078,2079,2080,2082,2083,2086,2087,2095,2096,22,11211,49152:65534,10050" }
+          - { option: TCP_OUT, value: "20,21,{{ ssh_port }},25,37,43,53,80,110,113,443,465,587,853,873,993,995,2086,2087,2089,2703,8080,8081,8443,44445,55556,11211,7770:7800,7080,10050" }
+          - { option: UDP_IN, value: "20,21,53,80,443,853" }
+          - { option: UDP_OUT, value: "20,21,53,113,123,853,873,6277,24441" }
+          - { option: ICMP_IN, value: "1" }
+          - { option: ICMP_IN_RATE, value: "500/s" }
+          - { option: DENY_IP_LIMIT, value: "500" }
+          - { option: SYNFLOOD, value: "1" }
+          - { option: UDPFLOOD, value: "1" }
+          - { option: LF_SSHD, value: "5" }
+          - { option: LF_FTPD, value: "10" }
+          - { option: LF_SMTPAUTH, value: "20" }
+          - { option: LF_EXIMSYNTAX, value: "10" }
+          - { option: LF_POP3D, value: "10" }
+          - { option: LF_IMAPD, value: "10" }
+          - { option: LF_HTACCESS, value: "5" }
+          - { option: LF_CPANEL, value: "5" }
+          - { option: CT_LIMIT, value: "200" }
+          - { option: PT_USERPROC, value: "0" }
+          - { option: PT_USERMEM, value: "0" }
+          - { option: PT_USERRSS, value: "0" }
