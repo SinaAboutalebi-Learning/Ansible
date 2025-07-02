@@ -1,0 +1,21 @@
+[epel]
+name=Extra Packages for Enterprise Linux $releasever - $basearch
+baseurl={{ custom_epel_mirror }}/$releasever/Everything/$basearch
+enabled=1
+gpgcheck=1
+countme=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$releasever
+
+[epel-debuginfo]
+name=Extra Packages for Enterprise Linux $releasever  - $basearch - Debug
+baseurl={{ custom_epel_mirror }}/$releasever/Everything/$basearch/debug
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$releasever 
+
+[epel-source]
+name=Extra Packages for Enterprise Linux $releasever  - $basearch - Source
+baseurl={{ custom_epel_mirror }}/$releasever/Everything/source/tree/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$releasever
