@@ -18,6 +18,9 @@
         - base_packages
 
     - role: cpanel
+      vars:
+        mysql_version: "10.5"
+        source: httpupdate.cpanel.net
       tags:
         - cpanel
 
