@@ -1,0 +1,99 @@
+# Pi-hole instances
+pihole_hosts:
+  - name: "{{ lookup('env', 'PIHOLE_HOST') }}"
+    password: "{{ lookup('env', 'PIHOLE_PASSWORD') }}"
+
+# DNS records
+pihole_records:
+  # Gateways
+
+  - name: ngfw.shitlab.gateway
+    type: A
+    data: 10.1.100.1
+    state: present
+
+  - name: shitlab.gateway
+    type: A
+    data: 172.16.101.254
+    state: present
+
+  - name: shitlab.vm.gateway
+    type: A
+    data: 172.16.100.1
+    state: present
+
+  - name: tci.shitlab.gateway
+    type: A
+    data: 192.168.100.1
+    state: present
+
+  # Infrastructure
+
+  - name: ngfw.shitlab.local
+    type: A
+    data: 172.16.100.5
+    state: present
+
+  - name: bigboy.shitlab.local
+    type: A
+    data: 172.16.150.254
+    state: present
+
+  - name: quantumberry.shitlab.local
+    type: A
+    data: 172.16.101.250
+    state: present
+
+  # Home Ingress
+  - name: webproxy.shitlab.local
+    type: A
+    data: 172.16.100.10
+    state: present
+
+  # Services
+
+  - name: boat.shitlab.local
+    type: A
+    data: 172.16.100.2
+    state: present
+
+  - name: status.shitlab.local
+    type: A
+    data: 172.16.100.2
+    state: present
+
+  - name: k3s.shitlab.local
+    type: A
+    data: 172.16.100.3
+    state: present
+
+  - name: dokploy.shitlab.local
+    type: A
+    data: 172.16.100.4
+    state: present
+
+  # CNAME records pointing to HomeIngress
+  - name: dash.shitlab.local
+    type: CNAME
+    data: webproxy.shitlab.local
+    state: present
+
+  - name: dns.shitlab.local
+    type: CNAME
+    data: webproxy.shitlab.local
+    state: present
+
+  - name: passbolt.shitlab.local
+    type: CNAME
+    data: webproxy.shitlab.local
+    state: present
+
+  - name: prometheus.shitlab.local
+    type: CNAME
+    data: webproxy.shitlab.local
+    state: present
+
+  - name: skybeacon.shitlab.local
+    type: CNAME
+    data: webproxy.shitlab.local
+    state: present
