@@ -87,7 +87,7 @@ pihole_records:
 
   - name: boat.shitlab.local
     type: A
-    data: 10.1.100.3
+    data: 10.1.100.4
     state: present
 
   - name: k3s.shitlab.local
