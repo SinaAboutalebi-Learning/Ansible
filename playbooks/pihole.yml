@@ -1,4 +1,4 @@
-- name: Manage Pi-hole local DNS records
+- name: Manage Pi-hole local DNS
   hosts: localhost
   gather_facts: false
 
@@ -7,3 +7,4 @@
 
   roles:
     - role: sbarbett.pihole.manage_local_records
+    - role: sbarbett.pihole.manage_lists
