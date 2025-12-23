@@ -3,6 +3,29 @@ pihole_hosts:
   - name: "{{ lookup('env', 'PIHOLE_HOST') }}"
     password: "{{ lookup('env', 'PIHOLE_PASSWORD') }}"
 
+# Pi-hole blocklists
+pihole_lists:
+  - address: "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
+    type: "block"
+    comment: "merged collection of hosts from reputable sources"
+    state: present
+  - address: "https://raw.githubusercontent.com/Jigsaw88/Spotify-Ad-List/main/Spotify%20Adblock.txt"
+    type: "block"
+    comment: "spotify adblock list"
+    state: present
+  - address: "https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt"
+    type: "block"
+    comment: "Polish Filters Team KADhosts"
+    state: present
+  - address: "	https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts"
+    type: "block"
+    comment: "FadeMind hosts.extras Spam"
+    state: present
+  - address: "https://v.firebog.net/hosts/AdguardDNS.txt"
+    type: "block"
+    comment: "Firebog AdguardDNS"
+    state: present
+
 # DNS records
 pihole_records:
   # Gateways
@@ -45,9 +68,9 @@ pihole_records:
     state: present
 
   # Home Ingress
-  - name: webproxy.shitlab.local
+  - name: janus.shitlab.local
     type: A
-    data: 172.16.100.10
+    data: 10.1.100.2
     state: present
 
   # Services
