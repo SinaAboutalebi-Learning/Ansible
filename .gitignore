@@ -38,3 +38,6 @@ Vagrantfile
 
 # My Variables
 group_vars/*
+
+# Ansible Galaxy roles
+roles/galaxy/*
