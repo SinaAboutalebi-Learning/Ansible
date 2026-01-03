@@ -80,7 +80,7 @@ pihole_records:
   # Home Ingress
   - name: janus.shitlab.local
     type: A
-    data: 10.1.100.2
+    data: 172.16.101.250
     state: present
 
   # Vms
@@ -98,6 +98,11 @@ pihole_records:
   # CNAME records pointing to HomeIngress
 
   - name: dns.shitlab.local
+    type: CNAME
+    data: janus.shitlab.local
+    state: present
+
+  - name: vw.shitlab.local
     type: CNAME
     data: janus.shitlab.local
     state: present
