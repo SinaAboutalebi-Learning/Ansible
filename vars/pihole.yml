@@ -102,7 +102,7 @@ pihole_records:
     data: janus.shitlab.local
     state: present
 
-  - name: vw.shitlab.local
+  - name: vault.shitlab.local
     type: CNAME
     data: janus.shitlab.local
     state: present
